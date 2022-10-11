@@ -34,11 +34,12 @@
             this.lblCount = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblTotal = new System.Windows.Forms.Label();
+            this.lblPath = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(116, 80);
+            this.button1.Location = new System.Drawing.Point(132, 92);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -48,7 +49,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(13, 31);
+            this.progressBar1.Location = new System.Drawing.Point(13, 34);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(285, 23);
             this.progressBar1.TabIndex = 1;
@@ -56,7 +57,7 @@
             // lblProcess
             // 
             this.lblProcess.AutoSize = true;
-            this.lblProcess.Location = new System.Drawing.Point(18, 58);
+            this.lblProcess.Location = new System.Drawing.Point(11, 60);
             this.lblProcess.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblProcess.Name = "lblProcess";
             this.lblProcess.Size = new System.Drawing.Size(20, 12);
@@ -65,7 +66,7 @@
             // 
             // lblCount
             // 
-            this.lblCount.Location = new System.Drawing.Point(157, 58);
+            this.lblCount.Location = new System.Drawing.Point(170, 60);
             this.lblCount.Name = "lblCount";
             this.lblCount.Size = new System.Drawing.Size(100, 23);
             this.lblCount.TabIndex = 3;
@@ -75,7 +76,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(263, 58);
+            this.label1.Location = new System.Drawing.Point(276, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(8, 12);
             this.label1.TabIndex = 4;
@@ -84,17 +85,26 @@
             // lblTotal
             // 
             this.lblTotal.AutoSize = true;
-            this.lblTotal.Location = new System.Drawing.Point(277, 58);
+            this.lblTotal.Location = new System.Drawing.Point(290, 60);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(11, 12);
             this.lblTotal.TabIndex = 5;
             this.lblTotal.Text = "0";
             // 
+            // lblPath
+            // 
+            this.lblPath.AutoSize = true;
+            this.lblPath.Location = new System.Drawing.Point(12, 19);
+            this.lblPath.Name = "lblPath";
+            this.lblPath.Size = new System.Drawing.Size(0, 12);
+            this.lblPath.TabIndex = 6;
+            // 
             // ProgressForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(337, 118);
+            this.ClientSize = new System.Drawing.Size(313, 127);
+            this.Controls.Add(this.lblPath);
             this.Controls.Add(this.lblTotal);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblCount);
@@ -117,5 +127,6 @@
         private System.Windows.Forms.Label lblCount;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblTotal;
+        private System.Windows.Forms.Label lblPath;
     }
 }

@@ -12,6 +12,7 @@ namespace FileManager
 {
     public partial class ProgressForm : Form
     {
+        
         private BackgroundWorker backgroundWorker1;
         public ProgressForm(BackgroundWorker backgroundWorker1,int Total)
         {
@@ -29,7 +30,9 @@ namespace FileManager
         }
         void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            this.lblCount.Text = e.UserState.ToString();
+            RunState state = e.UserState as RunState;
+            this.lblCount.Text = state.get_Count().ToString();
+            this.lblPath.Text = state.get_FolderPath().ToString();
             this.progressBar1.Value = e.ProgressPercentage;
             this.lblProcess.Text = e.ProgressPercentage + "%";
         }

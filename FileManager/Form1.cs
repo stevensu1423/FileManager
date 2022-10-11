@@ -23,7 +23,7 @@ namespace FileManager
             public static string FOLDER_NAME = "";
             public static string COPY_PATH = "";
             public static string TARGET_PATH = "";
-            public static int COUNT = 0;
+            public static int COUNT = 1;
         }
 
         public Form1()
@@ -67,13 +67,13 @@ namespace FileManager
             {
                 if (Directory.Exists(Global.FOLDER_NAME))
                 {
-                    if (Directory.Exists(Global.FOLDER_NAME + "\\" + fileName.Text))
+                    if (Directory.Exists(Global.FOLDER_NAME + @"\" + fileName.Text))
                     {
                         MessageBox.Show("資料夾已經存在了喔", "注意!");
                     }
                     else
                     {
-                        Directory.CreateDirectory(Global.FOLDER_NAME + "\\" + fileName.Text);
+                        Directory.CreateDirectory(Global.FOLDER_NAME + @"\" + fileName.Text);
                         MessageBox.Show("成功新增" + fileName.Text + "資料夾", "通知!");
 
                     }
@@ -137,7 +137,7 @@ namespace FileManager
                         }
                         else
                         {
-                            Directory.CreateDirectory(Global.FOLDER_NAME + "\\" + folderName);
+                            Directory.CreateDirectory(Global.FOLDER_NAME + @"\" + folderName);
                             num++;
                             Console.WriteLine("成功新增" + num);
 
@@ -191,7 +191,7 @@ namespace FileManager
             // button4.Enabled = false;
             if (Global.COPY_PATH != "" && Global.TARGET_PATH != "")
             {
-                Global.COUNT = 0;
+                Global.COUNT = 1;
                 System.IO.DirectoryInfo dirInfo = new System.IO.DirectoryInfo(Global.COPY_PATH);
                 int filesCount = GetAllFilesCount(dirInfo);
                 this.backgroundWorker1.RunWorkerAsync(); // 运行 backgroundWorker 组件
@@ -325,16 +325,28 @@ namespace FileManager
                         if (Directory.Exists(Global.TARGET_PATH))
                         {
 
-                            if (!Directory.Exists(Global.TARGET_PATH + "\\" + folderName))
+                            if (!Directory.Exists(Global.TARGET_PATH + @"\" + folderName))
                             {
-                                Directory.CreateDirectory(Global.TARGET_PATH + "\\" + folderName);
+                                Directory.CreateDirectory(Global.TARGET_PATH + @"\" + folderName);
                                 createdFolder++;
                             }
-                            if (Directory.Exists(Global.TARGET_PATH + "\\" + folderName))
+                            if (Directory.Exists(Global.TARGET_PATH + @"\" + folderName))
                             {
                                 createdFolder++;
-                                destFile = System.IO.Path.Combine(Global.TARGET_PATH + "\\" + folderName, fileName);
-                                System.IO.File.Copy(s, destFile, true);
+                                string targetPath = Global.TARGET_PATH + @"\" + folderName;
+                                destFile = System.IO.Path.Combine(targetPath, fileName);
+                                if (radioOveride.Checked)
+                                {
+                                    System.IO.File.Copy(s, destFile, radioOveride.Checked);
+                                }
+
+                               // else if (radioChangeName.Checked)
+                               // {
+
+                                //    destFile = System.IO.Path.Combine(targetPath, checkFileName(targetPath, fileName));
+                               //     System.IO.File.Copy(s, destFile, false);
+                               //}
+
                                 num++;
                             }
 
@@ -348,10 +360,11 @@ namespace FileManager
                         break;
                     }
                     state.set_Count(Global.COUNT);
+                    state.set_FolderPath(Global.COPY_PATH + "" + fileName);
                     //Thread.Sleep(100);
                     // worker.ReportProgress(100 * i / files.Length);
                     // i++;
-                    worker.ReportProgress(100 * Global.COUNT /filesCount, Global.COUNT);
+                    worker.ReportProgress(100 * Global.COUNT /filesCount, state);
                     Global.COUNT++;
                 }
                 foreach (string s in folders)
@@ -397,14 +410,14 @@ namespace FileManager
                         if (Directory.Exists(Global.TARGET_PATH))
                         {
 
-                            if (!Directory.Exists(Global.TARGET_PATH + "\\" + folderName))
+                            if (!Directory.Exists(Global.TARGET_PATH + @"\" + folderName))
                             {
-                                Directory.CreateDirectory(Global.TARGET_PATH + "\\" + folderName);
+                                Directory.CreateDirectory(Global.TARGET_PATH + @"\" + folderName);
                                 createdFolder++;
                             }
-                            if (Directory.Exists(Global.TARGET_PATH + "\\" + folderName))
+                            if (Directory.Exists(Global.TARGET_PATH + @"\" + folderName))
                             {
-                                CopyDirectory(Global.COPY_PATH + "\\" + fileName, Global.TARGET_PATH + "\\" + folderName + "\\" + fileName, Global.TARGET_PATH + "\\" + folderName + "\\" + fileName, false, i, filesCount);
+                                CopyDirectory(Global.COPY_PATH + @"\" + fileName, Global.TARGET_PATH + @"\" + folderName + @"\" + fileName, Global.TARGET_PATH + @"\" + folderName + @"\" + fileName, i, filesCount);
                                 num++;
                             }
 
@@ -444,6 +457,25 @@ namespace FileManager
             //            }
         }
 
+        public string checkFileName(string filePath, string fileName)
+        {
+            int i = 1;
+            string temp = "";
+            string files = Path.GetFileNameWithoutExtension(filePath + @"\" + fileName);
+            string extension = Path.GetExtension(filePath + @"\" + fileName);
+
+            do
+            {
+                files = fileName.Replace("(" + i + ")", "");
+                temp = files + "(" + i + ")";
+                i++;
+            } while (File.Exists(filePath + @"\" + fileName));
+            Console.WriteLine("File Path is " + files);
+            Console.WriteLine("Extension is " + extension);
+            Console.WriteLine("Changed Name is " + temp + "." + extension);
+            return temp + "" + extension;
+
+        }
         private void label3_Click(object sender, EventArgs e)
         {
 
@@ -465,37 +497,13 @@ namespace FileManager
             return total;
 
         }
-        public class RunState
-        {
-            public int count = 0;
-            public string folderPath = "";
-            public RunState()
-            {
-                count = 0;
-                folderPath = "";
-            }
-            public void set_Count(int count)
-            {
-                this.count = count;
-            }
-            public int get_Count()
-            {
-                return count;
-            }
-            public void set_FolderPath(string folderPath)
-            {
-                this.folderPath = folderPath;
-            }
-            public string get_FolderPath()
-            {
-                return folderPath;
-            }
-        }
-        private  bool CopyDirectory(string SourcePath, string DestinationPath, string targetPath,bool overwriteexisting,int count,int fileCount)
+
+        private  bool CopyDirectory(string SourcePath, string DestinationPath, string targetPath,int count,int fileCount)
         {   
             bool ret = false;
             try
             {
+                string destFile = "";
                 RunState state = new RunState();
                 SourcePath = SourcePath.EndsWith(@"\") ? SourcePath : SourcePath + @"\";
                 DestinationPath = DestinationPath.EndsWith(@"\") ? DestinationPath : DestinationPath + @"\";
@@ -508,19 +516,42 @@ namespace FileManager
                     foreach (string fls in Directory.GetFiles(SourcePath))
                     {
                         FileInfo flinfo = new FileInfo(fls);
-                        flinfo.CopyTo(DestinationPath +"\\" +flinfo.Name, overwriteexisting);
+                        //  destFile = System.IO.Path.Combine(targetPath, flinfo.Name);
+                        //  if (radioOveride.Checked)
+                        //  {
+                        //     System.IO.File.Copy(fls, destFile, true);
+                        //  }
+                        // else if (radioChangeName.Checked)
+                        //  {
+                        //     destFile = System.IO.Path.Combine(targetPath, checkFileName(targetPath, flinfo.Name));
+                        //     System.IO.File.Copy(fls, destFile, false);
+                        // }
+                        if (File.Exists(DestinationPath + @"\" + flinfo.Name))
+                        {
+                            if (radioOveride.Checked)
+                            {
+                                flinfo.CopyTo(DestinationPath + @"\" + flinfo.Name, true);
+                            }
+                        }
+                        else {
+                            flinfo.CopyTo(DestinationPath + @"\" + flinfo.Name, true);
+
+                        }
+
                         Console.WriteLine("Count is " + Global.COUNT);
                         //Thread.Sleep(100);
                         //worker.ReportProgress(100 * count / fileCount);
                         //count++;
                         //state.set_Count(Global.COUNT);
-                        worker.ReportProgress(100 * Global.COUNT / fileCount, Global.COUNT);
+                        state.set_Count(Global.COUNT);
+                        state.set_FolderPath(SourcePath+""+flinfo.Name);
+                        worker.ReportProgress(100 * Global.COUNT / fileCount, state);
                         Global.COUNT++;
                     }
                     foreach (string drs in Directory.GetDirectories(SourcePath))
                     {
                         DirectoryInfo drinfo = new DirectoryInfo(drs);
-                        if (CopyDirectory(drs, DestinationPath + drinfo.Name,targetPath, overwriteexisting,count, fileCount) == false)
+                        if (CopyDirectory(drs, DestinationPath + drinfo.Name,targetPath,count, fileCount) == false)
                             ret = false;
                     }
                 }
@@ -531,6 +562,11 @@ namespace FileManager
                 ret = false;
             }
             return ret;
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
 
         }
     }
