@@ -414,7 +414,7 @@ namespace FileManager
 
                 }
 
-                DialogResult result = MessageBox.Show("檔案轉移完成\r\n共" + num + "個檔案\r\n" + createdFolder + "個資料夾被建立", "通知!", MessageBoxButtons.OK);
+                DialogResult result = MessageBox.Show("檔案轉移完成", "通知!", MessageBoxButtons.OK);
                 if (result == DialogResult.OK)
                 {
                     // copyProgress.Value = 0;
