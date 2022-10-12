@@ -189,13 +189,17 @@ namespace FileManager
         private void button4_Click(object sender, EventArgs e)
         {
             // button4.Enabled = false;
-            if (Global.COPY_PATH != "" && Global.TARGET_PATH != "")
+            if(Global.COPY_PATH == Global.TARGET_PATH)
+            {
+                MessageBox.Show("複製路徑和目標路徑不可相同!", "注意!");
+            }
+            else if (Global.COPY_PATH != "" && Global.TARGET_PATH != "")
             {
                 Global.COUNT = 1;
                 System.IO.DirectoryInfo dirInfo = new System.IO.DirectoryInfo(Global.COPY_PATH);
-                int filesCount = GetAllFilesCount(dirInfo);
                 this.backgroundWorker1.RunWorkerAsync(); // 运行 backgroundWorker 组件
-                ProgressForm form = new ProgressForm(this.backgroundWorker1, filesCount);// 显示进度条窗体
+                ProgressForm form = new ProgressForm(this.backgroundWorker1, 0);// 显示进度条窗体
+
                 form.ShowDialog(this);
                 form.Close();
             }
@@ -261,17 +265,22 @@ namespace FileManager
         {
             worker = sender as BackgroundWorker;
             RunState state = new RunState();
+
             string fileName = "";
             string destFile = "";
             int num = 0;
             int createdFolder = 0;
             if (System.IO.Directory.Exists(Global.COPY_PATH))
             {
+
                 int i = 1;
                 string[] files = System.IO.Directory.GetFiles(Global.COPY_PATH);
                 string[] folders = System.IO.Directory.GetDirectories(Global.COPY_PATH);
                 System.IO.DirectoryInfo dirInfo = new System.IO.DirectoryInfo(Global.COPY_PATH);
+                state.set_FolderPath("正在計算大小...");
+                worker.ReportProgress(0, state);
                 int filesCount = GetAllFilesCount(dirInfo);
+                state.set_FileCount(filesCount);
                 int fileCreateYear, fileCreateMonth, fileCreateDay;
                 if (files.Length > 1)
                 {
@@ -359,6 +368,7 @@ namespace FileManager
                         e.Cancel = true;
                         break;
                     }
+                    state.set_State("");                    
                     state.set_Count(Global.COUNT);
                     state.set_FolderPath(Global.COPY_PATH + "" + fileName);
                     //Thread.Sleep(100);
@@ -486,12 +496,19 @@ namespace FileManager
 
         }
 
-        public static int GetAllFilesCount(System.IO.DirectoryInfo DirInfo)
+        public  int GetAllFilesCount(System.IO.DirectoryInfo DirInfo)
         {
+            RunState state = new RunState();
             int total = 0;
             total += DirInfo.GetFiles().Length;
             foreach(System.IO.DirectoryInfo subdir in DirInfo.GetDirectories())
             {
+                state.set_FolderPath("正在計算大小.");
+                worker.ReportProgress(0, state);
+                state.set_FolderPath("正在計算大小..");
+                worker.ReportProgress(0, state);
+                state.set_FolderPath("正在計算大小...");
+                worker.ReportProgress(0, state);
                 total += GetAllFilesCount(subdir);
             }
             return total;
@@ -545,6 +562,7 @@ namespace FileManager
                         //state.set_Count(Global.COUNT);
                         state.set_Count(Global.COUNT);
                         state.set_FolderPath(SourcePath+""+flinfo.Name);
+                        state.set_FileCount(fileCount);
                         worker.ReportProgress(100 * Global.COUNT / fileCount, state);
                         Global.COUNT++;
                     }
@@ -566,6 +584,11 @@ namespace FileManager
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void backgroundWorkerCount_DoWork(object sender, DoWorkEventArgs e)
         {
 
         }

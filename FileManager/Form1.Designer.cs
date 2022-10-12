@@ -56,6 +56,7 @@
             this.radioChangeName = new System.Windows.Forms.RadioButton();
             this.radioNoOveride = new System.Windows.Forms.RadioButton();
             this.radioOveride = new System.Windows.Forms.RadioButton();
+            this.backgroundWorkerCount = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
@@ -359,6 +360,12 @@
             this.radioOveride.UseVisualStyleBackColor = true;
             this.radioOveride.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
+            // backgroundWorkerCount
+            // 
+            this.backgroundWorkerCount.WorkerReportsProgress = true;
+            this.backgroundWorkerCount.WorkerSupportsCancellation = true;
+            this.backgroundWorkerCount.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCount_DoWork);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -431,6 +438,7 @@
         private System.Windows.Forms.RadioButton radioChangeName;
         private System.Windows.Forms.RadioButton radioNoOveride;
         private System.Windows.Forms.RadioButton radioOveride;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerCount;
     }
 }
 

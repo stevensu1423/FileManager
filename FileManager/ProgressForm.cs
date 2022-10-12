@@ -32,6 +32,7 @@ namespace FileManager
         {
             RunState state = e.UserState as RunState;
             this.lblCount.Text = state.get_Count().ToString();
+            this.lblTotal.Text = state.get_FileCount().ToString();
             this.lblPath.Text = state.get_FolderPath().ToString();
             this.progressBar1.Value = e.ProgressPercentage;
             this.lblProcess.Text = e.ProgressPercentage + "%";

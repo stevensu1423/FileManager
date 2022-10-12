@@ -51,7 +51,7 @@
             // 
             this.progressBar1.Location = new System.Drawing.Point(13, 34);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(285, 23);
+            this.progressBar1.Size = new System.Drawing.Size(325, 23);
             this.progressBar1.TabIndex = 1;
             // 
             // lblProcess
@@ -103,7 +103,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 127);
+            this.ClientSize = new System.Drawing.Size(350, 122);
             this.Controls.Add(this.lblPath);
             this.Controls.Add(this.lblTotal);
             this.Controls.Add(this.label1);
