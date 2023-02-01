@@ -193,6 +193,10 @@ namespace FileManager
             {
                 MessageBox.Show("複製路徑和目標路徑不可相同!", "注意!");
             }
+            else if (Global.TARGET_PATH.Contains(Global.COPY_PATH))
+            {
+                MessageBox.Show("目前尚未支援從父路徑複製到子路徑", "注意!");
+            }
             else if (Global.COPY_PATH != "" && Global.TARGET_PATH != "")
             {
                 Global.COUNT = 1;
